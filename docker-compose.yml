@@ -1,0 +1,36 @@
+version: "3"
+services:
+  erake_backend:
+    container_name: erake_backend
+    build:
+      context: ./src
+      dockerfile: ../build/Dockerfile
+    # env_file: ./api/.env
+    ports:
+      - 3001:3001
+    # networks:
+    #   - echo
+    # links:
+    #   - db
+    # depends_on:
+    #   - db
+    tty: true
+
+  db:
+    image: mysql:5.7
+    container_name: erake_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${ROOT_PASS}
+      MYSQL_DATABASE: ${DB}
+      MYSQL_USER: ${USER}
+      MYSQL_PASSWORD: ${PASS}
+      TZ: ${TZ} #TimeZone
+    env_file: ./src/.env
+    expose:
+      - 3306
+    ports:
+      - 3306:3306
+    volumes:
+      - my_volume:/var/lib/mysql
+volumes:
+  my_volume:
